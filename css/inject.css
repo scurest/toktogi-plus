@@ -1,0 +1,115 @@
+/* CSS Reset */
+#dict, #dict-inner, #toktogi-lock, #toktogi-notification, .dict-word, .dict-def {
+	display: block;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	text-align: left;
+	line-height: normal;
+	list-style: none;
+}
+
+#dict {
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	margin: 0.5rem 0 1rem 0;
+	border-radius: 2px;
+	min-width: 120px;
+	display: none;
+  	background-color: #f5f5f5;
+	position: absolute;
+	max-width: 200px;
+	padding: 8px;
+	z-index: 9999999999999;
+}
+
+#toktogi-notification {
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	margin: 0.5rem 0 1rem 0;
+	border-radius: 2px;
+	display: none;
+	position: fixed;
+  	background-color: #f5f5f5;
+	top: 10px;
+	right: 10px;
+	z-index: 9999999999999;
+	padding: 8px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	color: #000;
+}
+
+#update-notification {
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	margin: 0.5rem 0 1rem 0;
+	border-radius: 2px;
+	display: block;
+	position: fixed;
+  	background-color: #f5f5f5;
+	top: 10px;
+	right: 10px;
+	z-index: 9999999999999;
+	padding: 16px 32px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	color: #000;
+}
+
+#update-notification a {
+	cursor: pointer;
+	color: #2980b9;
+	text-decoration: underline;
+}
+
+#dict-inner .divider {
+	height: 8px;
+}
+
+#dict-inner .dict-word {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	color: #000;
+	display: block;
+	float: left;
+}
+
+#dict-inner .toktogi-plus {
+	display: block;
+	float: left;
+	margin-left: 8px;
+}
+
+#dict-inner .dict-def {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	color: #000;
+	max-width: 180px;
+	padding-left: 5px;
+	padding-bottom: 2px;
+	clear: both;
+}
+
+#toktogi-lock {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+}
+
+.toktogi-icon {
+	height: 15px;
+	width: 15px;
+	opacity: .54;
+}
+
+.toktogi-icon:hover {
+	opacity: 1;
+}
+

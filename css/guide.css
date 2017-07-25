@@ -1,0 +1,60 @@
+@font-face {
+	font-family: 'Jura-DemiBold';
+	src: url('Jura-DemiBold.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Jura-Light';
+	src: url('Jura-Light.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Jura-Medium';
+	src: url('Jura-Medium.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Jura-Regular';
+	src: url('Jura-Regular.woff') format('woff');
+}
+
+body {
+	font-family: 'Jura-Regular';
+}
+
+#content {
+	display: block;
+	width: 75%;
+	margin-left: 12.5%;
+	min-width: 720px;
+}
+
+h1 {
+	text-align: center;
+	color: #0da63c;
+	font-family: 'Jura-Medium';
+	font-size: 42pt;
+	margin: 25px 0 0 0;
+}
+
+h2 {
+	color: #b2001e;
+	font-family: 'Jura-DemiBold';
+	font-size: 32pt;
+	margin: 40px 0 0 0;
+}
+
+p {
+	font-size: 18pt;
+	padding-bottom: 40px;
+}
+
+#korean {
+	padding-top: 10px;
+	margin: 34px 0 0 0;
+	padding: 0;
+}
+
+img {
+	float: right;
+}

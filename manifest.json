@@ -1,0 +1,36 @@
+{
+   "author": "Brad McDermott",
+   "background": {
+      "scripts": [ "js/background-build.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+         "19": "images/19.png",
+         "38": "images/38.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "all_frames": false,
+      "css": [ "css/inject.css" ],
+      "js": [ "js/vendor/jquery-2.1.4.min.js", "js/browser_tools.js", "js/inject.js" ],
+      "matches": [ "http://*/*", "https://*/*", "file:///*" ],
+      "run_at": "document_end"
+   } ],
+   "description": "Popup Korean-English dictionary that shows you the definitions of Korean words when you hover the mouse next to them",
+   "icons": {
+      "128": "images/128.png",
+      "16": "images/16.png",
+      "48": "images/48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmbf3O28K1sqJO5g0Q2J3bMGmi4BFt3kl7nG6rhKEuLXBFQsmPvDIribH1hLBVEuevMSdKIv6Yrbk5swDZ54Nc/PB99n2hTwP1HBKLe3hdmWaCS4zg79C3DhxiA+e4d//gbWe7QsA57ASYsSZT30+P7niBl/dt5Y2h7TK7oCmQysKllPBeQrBn3arOXGq62MfACEMdG4x+0Q4J9LClvaPc6p9aQ+Sr1LTwdidWH9wwGFzgCyld7udzrtxsEnyWc5lO5ajICCAlPErxIdbieAedOoVF6/dw5n94+8/XXIkThzNqgGKcV7hG7+nAAzIxTfSeNKnL2aj3HD+tBbvH4w0twIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "33",
+   "name": "Toktogi: A Korean-English Popup Dictionary",
+   "options_page": "options.html",
+   "permissions": [ "http://*/*", "https://*/*", "unlimitedStorage", "tabs" ],
+   "short_name": "Toktogi",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.6.6",
+   "web_accessible_resources": [ "images/unlock.png", "images/lock.png", "images/plus.png" ]
+}
