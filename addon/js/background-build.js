@@ -86,14 +86,14 @@
 /* Copyright 2015, Brad McDermott, All rights reserved. */
 
 exports.openTab = function(url, openerId) {
-	chrome.tabs.create({
-		url: chrome.extension.getURL(url),
-		openerTabId: openerId
+	browser.tabs.create({
+		url: browser.extension.getURL(url),
+		//openerTabId: openerId
 	});
 };
 
 exports.setBadgeText = function(text) {
-	chrome.browserAction.setBadgeText({ text: text });
+	browser.browserAction.setBadgeText({ text: text });
 };
 
 exports.getSavedVersion = function() {
@@ -101,7 +101,7 @@ exports.getSavedVersion = function() {
 };
 
 exports.getVersion = function() {
-	return chrome.runtime.getManifest().version;
+	return browser.runtime.getManifest().version;
 };
 
 exports.setVersion = function(version) {
@@ -111,21 +111,22 @@ exports.setVersion = function(version) {
 exports.sendMessage = function(tab, data) {
 	// data is an object that includes 'name' and 'data' fields
 	if (tab && tab.id !== null) {
-		chrome.tabs.sendMessage(tab.id, data);
+		browser.tabs.sendMessage(tab.id, data);
 	} else {
-		chrome.runtime.sendMessage(data);
+		browser.runtime.sendMessage(data);
 	}
 };
 
 exports.getDictJson = function() {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', 'js/dict.json', false);
+	xhr.overrideMimeType('text/json');
 	xhr.send(null);
 	return JSON.parse(xhr.responseText);
 };
 
 exports.sendAllMessage = function(name, data) {
-	chrome.tabs.query({}, function(tabs) {
+	browser.tabs.query({}, function(tabs) {
 		var message = { name: name, data: data };
 		for (var i=0; i<tabs.length; ++i) {
 			exports.sendMessage(tabs[i], message);
@@ -149,7 +150,7 @@ exports.messageListener = function (message, sender) {
 };
 
 exports.init = function() {
-	chrome.runtime.onMessage.addListener(exports.messageListener);
+	browser.runtime.onMessage.addListener(exports.messageListener);
 };
 
 },{}],3:[function(require,module,exports){

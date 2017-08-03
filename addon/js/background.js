@@ -78,5 +78,7 @@
 		console.log("Received definition object:", data);
 	}
 
+	console.log("HELLO");
 	init();
+
 })();
