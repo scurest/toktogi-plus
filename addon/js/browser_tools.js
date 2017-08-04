@@ -45,13 +45,4 @@
 	browser.getImageUrl = function (filename) {
 		return browser.extension.getURL("images/" + filename);
 	}
-
-	// Popup.js
-
-	browser.initPanel = function () {
-		browser.runtime.onMessage.addListener(browser.messageListener);
-
-		browser.sendMessage({ name: "popupLoaded" });
-	}
-
 })(window, browser);

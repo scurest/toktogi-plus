@@ -7,8 +7,7 @@
       "default_icon": {
          "19": "images/19.png",
          "38": "images/38.png"
-      },
-      "default_popup": "popup.html"
+      }
    },
    "content_scripts": [ {
       "css": [ "css/inject.css" ],

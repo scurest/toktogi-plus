@@ -22,11 +22,11 @@
 		browser.addListener("text", handleLookup);
 		browser.addListener("injectedLoaded", sendScriptData);
 		browser.addListener("popupLoaded", sendPopupData);
-		browser.addListener("updateIsOn", toggleOnOff);
 		browser.addListener("showOptions", showOptions);
 		browser.addListener("addToList", addToList);
-
 		browser.init();
+
+		browser.addActionListener(toggleOnOff);
 	}
 
 
@@ -59,8 +59,8 @@
 		browser.openTab("options.html", tab.id);
 	}
 
-	function toggleOnOff(tab, data) {
-		isOn = data.isOn;
+	function toggleOnOff(tab) {
+		isOn = !isOn;
 
 		if (isOn) {
 			dictionary.load();
@@ -94,6 +94,10 @@ exports.openTab = function(url, openerId) {
 
 exports.setBadgeText = function(text) {
 	browser.browserAction.setBadgeText({ text: text });
+};
+
+exports.addActionListener = function(fn) {
+	browser.browserAction.onClicked.addListener(fn);
 };
 
 exports.getSavedVersion = function() {
