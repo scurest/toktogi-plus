@@ -1,17 +1,18 @@
 /* Copyright 2015, Brad McDermott, All rights reserved. */
+'use strict';
 
-var browser = require("./browser.js"),
-    dictionary;
+const dictionary = {};
 
 // TODO Make this more efficient, probably redo the whole process
-exports.lookupWords = function(str) {
-	var i, j, word, info, roots, root,
-	    entryList = [];
+dictionary.lookupWords = function(str) {
+	const dict = dictionary.dict;
 
-	for (i = 1; i < str.length + 1; i++) {
-		word = str.substring(0, i);
+	let entryList = [];
+
+	for (let i = 1; i < str.length + 1; i++) {
+		const word = str.substring(0, i);
 		// An array of definitions
-		info = dictionary[word];
+		const info = dict[word];
 
 		if (info) {
 			if (info.defs) {
@@ -20,12 +21,12 @@ exports.lookupWords = function(str) {
 
 			// word is a conjugated verb, add root definition
 			if(info.roots) {
-				roots = Object.keys(info.roots);
+				const roots = Object.keys(info.roots);
 
 				roots.forEach(function (root) {
 					entryList.push({
 						word: word,
-						defs: dictionary[root].defs.split("|"),
+						defs: dict[root].defs.split("|"),
 						root: root
 					});
 				});
@@ -33,12 +34,12 @@ exports.lookupWords = function(str) {
 		}
 	}
 	return entryList;
-};
+}
 
-exports.load = function() {
-	dictionary = browser.getDictJson();
-};
+dictionary.load = function() {
+	dictionary.dict = util.getDictJson();
+}
 
-exports.unload = function() {
-	dictionary = null;
-};
+dictionary.unload = function() {
+	dictionary.dict = null;
+}
