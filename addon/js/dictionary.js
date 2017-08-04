@@ -36,10 +36,6 @@ dictionary.lookupWords = function(str) {
 	return entryList;
 }
 
-dictionary.load = function() {
-	dictionary.dict = util.getDictJson();
-}
-
-dictionary.unload = function() {
-	dictionary.dict = null;
+dictionary.load = async function() {
+	dictionary.dict = await util.getDictJson();
 }

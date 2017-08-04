@@ -35,12 +35,9 @@ util.sendMessage = function(tab, data) {
 	}
 };
 
-util.getDictJson = function() {
-	const xhr = new XMLHttpRequest();
-	xhr.open('GET', 'js/dict.json', false);
-	xhr.overrideMimeType('text/json');
-	xhr.send(null);
-	return JSON.parse(xhr.responseText);
+util.getDictJson = async function() {
+	let response = await fetch('dict.json');
+	return response.json();
 };
 
 util.sendAllMessage = function(name, data) {

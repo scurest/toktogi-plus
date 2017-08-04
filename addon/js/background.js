@@ -27,7 +27,6 @@ function init() {
 }
 
 
-
 // Listener callbacks
 
 function handleLookup(tab, data) {
@@ -56,12 +55,10 @@ function toggleOnOff(tab) {
 	isOn = !isOn;
 
 	if (isOn) {
-		dictionary.load();
 		util.sendAllMessage("startListeners");
 		util.setBadgeText("On");
 
 	} else {
-		dictionary.unload();
 		util.sendAllMessage("stopListeners");
 		util.setBadgeText("");
 	}
@@ -73,4 +70,4 @@ function addToList(tab, data) {
 	console.log("Received definition object:", data);
 }
 
-init();
+dictionary.load().then(() => init());
