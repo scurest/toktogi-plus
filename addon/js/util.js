@@ -5,8 +5,7 @@ const util = {};
 
 util.openTab = function(url, openerId) {
 	browser.tabs.create({
-		url: browser.extension.getURL(url),
-		openerTabId: openerId
+		url: browser.extension.getURL(url)
 	});
 };
 
