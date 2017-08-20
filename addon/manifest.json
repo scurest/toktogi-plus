@@ -1,7 +1,7 @@
 {
    "author": "Brad McDermott",
    "background": {
-      "scripts": [ "js/util.js", "js/dictionary.js", "js/background.js" ]
+      "scripts": [ "js/background/util.js", "js/background/dictionary.js", "js/background/background.js" ]
    },
    "browser_action": {
       "default_icon": {
@@ -11,7 +11,7 @@
    },
    "content_scripts": [ {
       "css": [ "css/inject.css" ],
-      "js": [ "js/vendor/jquery-2.1.4.min.js", "js/browser_tools.js", "js/inject.js" ],
+      "js": [ "js/vendor/jquery-2.1.4.min.js", "js/content/browser_tools.js", "js/content/inject.js" ],
       "matches": [ "<all_urls>" ],
       "run_at": "document_end"
    } ],
