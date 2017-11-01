@@ -1,4 +1,5 @@
 /* Copyright 2015, Brad McDermott, All rights reserved. */
+"use strict";
 
 ;(function (root, browser) {
 	root.browser = browser;
@@ -16,7 +17,7 @@
 	}
 
 	browser.messageListener = function (message) {
-		var callback = browser.messageCallbacks[message.name];
+		const callback = browser.messageCallbacks[message.name];
 
 		callback && callback(message.data);
 	}

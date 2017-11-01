@@ -1,26 +1,29 @@
 /* Copyright 2015, Brad McDermott, All rights reserved. */
+"use strict";
 
 ;(function () {
-	var range,
-		currentNode,
-		currentOffset,
-		isOn,
-		// Box state and variables
-		lookupTimeout,
-		isShowing,
-		isLocked,
-		selectionTop,
-		selectionRight,
-		selectionLeft,
-		boxRight,
-		boxTop,
-		boxBottom,
-		currentDefs,
-		currentContext,
-		// box jquery object
-		$dict,
-		$lock,
-		$notification;
+	let range;
+	let currentNode;
+	let currentOffset;
+	let isOn;
+	// Box state and variables
+	let lookupTimeout;
+	let isShowing;
+	let isLocked;
+	let selectionTop;
+	let selectionRight;
+	let selectionLeft;
+	let selectionBottom;
+	let boxRight;
+	let boxTop;
+	let boxBottom;
+	let currentDefs;
+	let currentContext;
+	// box jquery object
+	let $dict;
+	let $dictInner;
+	let $lock;
+	let $notification;
 
 	browser.addListener("injectedData", loadData);
 	browser.addListener("found", displayDef);
@@ -29,11 +32,8 @@
 
 	// TODO refactor this
 	function displayDef (defArray) {
-		var display = "",
-			i,
-			j,
-			// Finds longest word in array of results for highlighting
-			longestMatch = defArray[defArray.length - 1].word;
+		// Finds longest word in array of results for highlighting
+		const longestMatch = defArray[defArray.length - 1].word;
 
 		// TODO make sure the user hasn't moved the mouse since request
 		if (currentNode && currentNode.length > 1) {
@@ -43,14 +43,14 @@
 			// makes the node as long as the longest match, selects it
 			currentNode = currentNode.splitText(currentOffset);
 			currentNode.splitText(longestMatch.length);
-			var wordRange = document.createRange();
-			var selection = window.getSelection();
+			const wordRange = document.createRange();
+			const selection = window.getSelection();
 			wordRange.selectNodeContents(currentNode);
 			selection.removeAllRanges();
 			selection.addRange(wordRange);
 
 			// Save highlighted word coordinates
-			var rect = wordRange.getBoundingClientRect();
+			const rect = wordRange.getBoundingClientRect();
 
 			selectionLeft = rect.left + $(window).scrollLeft();
 			selectionRight = rect.right + $(window).scrollLeft();
@@ -63,8 +63,8 @@
 
 			// Clear dict box, fill with results, longest word on top
 			$dictInner.empty();
-			for (i = defArray.length - 1; i >= 0; i--) {
-				if(i !== defArray.length - 1) {
+			for (let i = defArray.length - 1; i >= 0; i--) {
+				if (i !== defArray.length - 1) {
 					$dictInner.append($("<div>", { class: 'divider' }));
 				}
 
@@ -82,7 +82,7 @@
 				// $plus.click(addToList);
 				// $dictInner.append($plus);
 
-				for (j = 0; j < defArray[i].defs.length; j++) {
+				for (let j = 0; j < defArray[i].defs.length; j++) {
 					$dictInner.append(
 						$("<span>", { class: 'dict-def' }).text( defArray[i].defs[j])
 					);
@@ -129,7 +129,7 @@
 			return;
 		}
 
-		var startNode = browser.getStartNode(range);
+		const startNode = browser.getStartNode(range);
 
 		// startNode sometimes null
 		if (startNode === null) {
@@ -149,8 +149,8 @@
 		$(document).on("mousemove", function (event) {
 			clearTimeout(lookupTimeout);
 
-			var pageX = event.clientX,
-				pageY = event.clientY;
+			const pageX = event.clientX;
+			const pageY = event.clientY;
 
 			if (!isShowing) {
 				range = browser.getRange(pageX, pageY);
@@ -173,6 +173,8 @@
 	}
 
 	function turnOn() {
+		if (!$notification) return;
+
 		$notification.show();
 		setTimeout(function () {
 			$notification.hide();
@@ -186,9 +188,9 @@
 	}
 
 	function showUpdateNotification() {
-		var $update = $("<div>", { id: 'update-notification' }).appendTo("body"),
-			$updateText = $("<span>").text("Toktogi has been "),
-			$updateLink = $("<a>").text("updated").appendTo($updateText);
+		const $update = $("<div>", { id: 'update-notification' }).appendTo("body");
+		const $updateText = $("<span>").text("Toktogi has been ");
+		const $updateLink = $("<a>").text("updated").appendTo($updateText);
 
 		$update.append($updateText);
 
@@ -214,13 +216,12 @@
 	}
 
 	function addToList(event) {
-		var index = $(this).attr('data-index');
+		const index = $(this).attr('data-index');
 		definition = currentDefs[index];
 		browser.sendMessage({ name: "addToList", data: {
 			definition: definition,
 			location: window.location.href,
 			context: currentContext
-
 		} });
 	}
 
