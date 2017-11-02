@@ -6,15 +6,14 @@
 	let currentNode;
 	let currentOffset;
 	let isOn;
+	let savedX;
+	let savedY;
 	// Box state and variables
 	let lookupTimeout;
 	let isShowing;
 	let isLocked;
-	let selectionTop;
-	let selectionRight;
-	let selectionLeft;
-	let selectionBottom;
 	let boxRight;
+	let boxLeft;
 	let boxTop;
 	let boxBottom;
 	let currentDefs;
@@ -36,25 +35,19 @@
 		const longestMatch = defArray[defArray.length - 1].word;
 
 		// TODO make sure the user hasn't moved the mouse since request
-		if (currentNode && currentNode.length > 1) {
+		if (currentNode) {
 			// grab all text for context
 			// TODO wait to grab this when they actually add the word to vocab list
-			currentContext = currentNode.wholeText;
-			// makes the node as long as the longest match, selects it
-			const wordRange = document.createRange();
-			wordRange.setStart(currentNode, currentOffset);
-			wordRange.setEnd(currentNode, currentOffset + longestMatch.length);
-			const selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(wordRange);
-
-			// Save highlighted word coordinates
-			const rect = wordRange.getBoundingClientRect();
-
-			selectionLeft = rect.left + $(window).scrollLeft();
-			selectionRight = rect.right + $(window).scrollLeft();
-			selectionTop = rect.top + $(window).scrollTop();
-			selectionBottom = rect.bottom + $(window).scrollTop();
+			currentContext = getCurrentNodeContents();
+			if (currentNode.nodeType === 3) {
+				// makes the node as long as the longest match, selects it
+				const wordRange = document.createRange();
+				wordRange.setStart(currentNode, currentOffset);
+				wordRange.setEnd(currentNode, currentOffset + longestMatch.length);
+				const selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(wordRange);
+			}
 
 			currentDefs = defArray;
 
@@ -86,11 +79,12 @@
 				}
 			}
 
-			$dict.css({ top: selectionBottom, left: selectionLeft }).show();
+			$dict.css({ top: savedY + 15, left: savedX }).show();
 
 			// Save box coordinates
 			boxTop = $dict.offset().top;
-			boxRight = $dict.offset().left + $dict.width();
+			boxLeft = $dict.offset().left;
+			boxRight = boxLeft + $dict.width();
 			boxBottom = boxTop + $dict.height();
 
 			isShowing = true;
@@ -98,22 +92,29 @@
 	}
 
 	function isOutOfBox (x, y) {
-		// Area to the right of the word but above the box
-		// highlighting the next word must be easy
-		return (x > selectionRight - 5 && y < boxTop) ||
-			// left of the box/selection with small padding
-			x < selectionLeft - 5 ||
-			// extra padding on the right
-			x > boxRight + 40 ||
-			y < selectionTop - 5 ||
-			// a little extra padding on the bottom
-			y > boxBottom + 10;
+		if (browser.getStartNode(range) === currentNode &&
+			browser.getOffset(range) !== currentOffset) return true;
+		if (
+			(x <= boxRight + 5) &&
+			(x >= boxLeft - 5) &&
+			(y >= boxTop - 40) &&
+			(y <= boxBottom + 5)
+		) return false;
+		return true;
 	}
 
 	function closeBox () {
 		isShowing = false;
 		$dict.hide();
 		window.getSelection().removeAllRanges();
+	}
+
+	function getCurrentNodeContents() {
+		if (currentNode.nodeType === 3) {
+			return currentNode.data;
+		} else {
+			return currentNode.value;
+		}
 	}
 
 	function lookupWord () {
@@ -134,12 +135,17 @@
 			return;
 		}
 
-		// nodeType 3 is text
-		if (startNode.nodeType == 3) {
+		const isTextOrField =
+			startNode.nodeType === 3 ||
+			startNode.nodeName === "INPUT" ||
+			startNode.nodeName === "TEXTAREA";
+
+		if (isTextOrField) {
 			currentNode = startNode;
 			currentOffset = browser.getOffset(range);
 			// TODO more efficient searching, check for adjacent nodes
-			browser.sendMessage({ name: "text", data: { text: currentNode.data.slice(currentOffset) } });
+			const text = getCurrentNodeContents().slice(currentOffset);
+			browser.sendMessage({ name: "text", data: { text } });
 		}
 	}
 
@@ -150,14 +156,17 @@
 			const pageX = event.clientX;
 			const pageY = event.clientY;
 
+			range = browser.getRange(pageX, pageY);
+
 			if (!isShowing) {
-				range = browser.getRange(pageX, pageY);
-				lookupTimeout = setTimeout(function () { lookupWord(); }, 50);
+				savedX = $(window).scrollLeft() + pageX;
+				savedY = $(window).scrollTop() + pageY;
+				lookupTimeout = setTimeout(lookupWord, 50);
 				return;
 			}
 
 			// if showing, see if mouse has left dict/word area
-			if (!isLocked && isOutOfBox(pageX, pageY + $(window).scrollTop())) {
+			if (!isLocked && isOutOfBox(pageX + $(window).scrollLeft(), pageY + $(window).scrollTop())) {
 				closeBox();
 			}
 		});
