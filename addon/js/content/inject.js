@@ -113,6 +113,7 @@
 	function closeBox () {
 		isShowing = false;
 		$dict.hide();
+		window.getSelection().removeAllRanges();
 	}
 
 	function lookupWord () {
