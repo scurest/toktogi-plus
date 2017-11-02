@@ -161,7 +161,7 @@
 			if (!isShowing) {
 				savedX = $(window).scrollLeft() + pageX;
 				savedY = $(window).scrollTop() + pageY;
-				lookupTimeout = setTimeout(lookupWord, 50);
+				lookupTimeout = setTimeout(lookupWord, 5);
 				return;
 			}
 
