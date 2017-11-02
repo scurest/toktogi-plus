@@ -21,4 +21,4 @@ Installing unsigned addons permanently requires a special version of Firefox; se
 
 - [x] Convert to WebExtension API
 - [x] Toolbar button toggles on/off with one click
-- [ ] Pop-up works for text in `<textarea>` and other input elements
+- [x] Pop-up works for text in `<textarea>`/`<input>`
