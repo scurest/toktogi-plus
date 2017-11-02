@@ -41,11 +41,10 @@
 			// TODO wait to grab this when they actually add the word to vocab list
 			currentContext = currentNode.wholeText;
 			// makes the node as long as the longest match, selects it
-			currentNode = currentNode.splitText(currentOffset);
-			currentNode.splitText(longestMatch.length);
 			const wordRange = document.createRange();
+			wordRange.setStart(currentNode, currentOffset);
+			wordRange.setEnd(currentNode, currentOffset + longestMatch.length);
 			const selection = window.getSelection();
-			wordRange.selectNodeContents(currentNode);
 			selection.removeAllRanges();
 			selection.addRange(wordRange);
 
@@ -56,8 +55,6 @@
 			selectionRight = rect.right + $(window).scrollLeft();
 			selectionTop = rect.top + $(window).scrollTop();
 			selectionBottom = rect.bottom + $(window).scrollTop();
-
-			currentNode.parentNode.normalize();
 
 			currentDefs = defArray;
 
