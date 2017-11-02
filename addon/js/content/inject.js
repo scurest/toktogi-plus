@@ -16,68 +16,21 @@
 	let boxLeft;
 	let boxTop;
 	let boxBottom;
-	let currentDefs;
-	let currentContext;
 	// box jquery object
 	let $dict;
 	let $dictInner;
 	let $lock;
 	let $notification;
 
-	browser.addListener("injectedData", loadData);
-	browser.addListener("found", displayDef);
-	browser.addListener("startListeners", turnOn);
-	browser.addListener("stopListeners", stopListeners);
-
-	// TODO refactor this
 	function displayDef (defArray) {
 		// Finds longest word in array of results for highlighting
 		const longestMatch = defArray[defArray.length - 1].word;
 
 		// TODO make sure the user hasn't moved the mouse since request
 		if (currentNode) {
-			// grab all text for context
-			// TODO wait to grab this when they actually add the word to vocab list
-			currentContext = getCurrentNodeContents();
-			if (currentNode.nodeType === 3) {
-				// makes the node as long as the longest match, selects it
-				const wordRange = document.createRange();
-				wordRange.setStart(currentNode, currentOffset);
-				wordRange.setEnd(currentNode, currentOffset + longestMatch.length);
-				const selection = window.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(wordRange);
-			}
+			highlightMatch(longestMatch.length);
 
-			currentDefs = defArray;
-
-			// Clear dict box, fill with results, longest word on top
-			$dictInner.empty();
-			for (let i = defArray.length - 1; i >= 0; i--) {
-				if (i !== defArray.length - 1) {
-					$dictInner.append($("<div>", { class: 'divider' }));
-				}
-
-				var word = defArray[i].word;
-
-				if (defArray[i].root) {
-					word = word + " (" + defArray[i].root + ")";
-				}
-
-				$dictInner.append(
-					$("<span>", { class: 'dict-word' }).text(word)
-				);
-				// TODO turn this back on when vocab list is working
-				// var $plus = $("<img>", { class: 'toktogi-plus toktogi-icon', "data-index": i, src: browser.getImageUrl('plus.png') });
-				// $plus.click(addToList);
-				// $dictInner.append($plus);
-
-				for (let j = 0; j < defArray[i].defs.length; j++) {
-					$dictInner.append(
-						$("<span>", { class: 'dict-def' }).text( defArray[i].defs[j])
-					);
-				}
-			}
+			populateDictBox(defArray);
 
 			$dict.css({ top: savedY + 15, left: savedX }).show();
 
@@ -91,6 +44,50 @@
 		}
 	}
 
+	/// Highlight the matched text (but not if its in a field).
+	function highlightMatch(length) {
+		if (currentNode.nodeType === 3) {
+			const wordRange = document.createRange();
+			wordRange.setStart(currentNode, currentOffset);
+			wordRange.setEnd(currentNode, currentOffset + length);
+			const selection = window.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(wordRange);
+		}
+	}
+
+	// Clear dict box, fill with results, longest word on top
+	function populateDictBox(defArray) {
+		$dictInner.empty();
+		for (let i = defArray.length - 1; i >= 0; i--) {
+			if (i !== defArray.length - 1) {
+				$dictInner.append($("<div>", { class: 'divider' }));
+			}
+
+			let word = defArray[i].word;
+
+			if (defArray[i].root) {
+				word = word + " (" + defArray[i].root + ")";
+			}
+
+			$dictInner.append(
+				$("<span>", { class: 'dict-word' }).text(word)
+			);
+			// TODO turn this back on when vocab list is working
+			// var $plus = $("<img>", { class: 'toktogi-plus toktogi-icon', "data-index": i, src: browser.getImageUrl('plus.png') });
+			// $plus.click(addToList);
+			// $dictInner.append($plus);
+
+			for (let j = 0; j < defArray[i].defs.length; j++) {
+				$dictInner.append(
+					$("<span>", { class: 'dict-def' }).text( defArray[i].defs[j])
+				);
+			}
+		}
+	}
+
+	// Decide whether the mouse has moved far enough away to dimiss
+	// the dictionary pop-up.
 	function isOutOfBox (x, y) {
 		if (browser.getStartNode(range) === currentNode &&
 			browser.getOffset(range) !== currentOffset) return true;
@@ -106,7 +103,6 @@
 	function closeBox () {
 		isShowing = false;
 		$dict.hide();
-		window.getSelection().removeAllRanges();
 	}
 
 	function getCurrentNodeContents() {
@@ -168,6 +164,10 @@
 			// if showing, see if mouse has left dict/word area
 			if (!isLocked && isOutOfBox(pageX + $(window).scrollLeft(), pageY + $(window).scrollTop())) {
 				closeBox();
+				// Remove selection
+				if (currentNode.nodeType === 3) {
+					window.getSelection().removeAllRanges();
+				}
 			}
 		});
 
@@ -222,16 +222,6 @@
 		}
 	}
 
-	function addToList(event) {
-		const index = $(this).attr('data-index');
-		definition = currentDefs[index];
-		browser.sendMessage({ name: "addToList", data: {
-			definition: definition,
-			location: window.location.href,
-			context: currentContext
-		} });
-	}
-
 	// Kick things off when response comes back from bg page
 	function loadData(data) {
 		isOn = data.isOn;
@@ -256,5 +246,10 @@
 		}
 	}
 
+
+	browser.addListener("injectedData", loadData);
+	browser.addListener("found", displayDef);
+	browser.addListener("startListeners", turnOn);
+	browser.addListener("stopListeners", stopListeners);
 	browser.initInject();
 })();
