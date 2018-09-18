@@ -1,6 +1,10 @@
 /* Copyright 2015, Brad McDermott, All rights reserved. */
 "use strict";
 
+if (window.browser == null) {
+	window.browser = chrome;
+}
+
 ;(function (root, browser) {
 	root.browser = browser;
 
@@ -26,7 +30,14 @@
 	// Inject.js
 
 	browser.getRange = function (pageX, pageY) {
-		return document.caretPositionFromPoint(pageX, pageY);
+		if (document.caretPositionFromPoint) {
+			return document.caretPositionFromPoint(pageX, pageY);
+		} else {
+			let output = document.caretRangeFromPoint(pageX, pageY);
+			output.offsetNode = output.startContainer;
+			output.offset = output.startOffset;
+			return output;
+		}
 	}
 
 	browser.getOffset = function (range) {

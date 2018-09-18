@@ -1,6 +1,10 @@
 /* Copyright 2015, Brad McDermott, All rights reserved. */
 "use strict";
 
+if (window.browser == null) {
+	window.browser = chrome;
+}
+
 ;(function () {
 	let range;
 	let currentNode;
